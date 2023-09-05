@@ -50,7 +50,7 @@ public class Comment {
     public String toString() {
         return "Comment{" +
                 ", user=" + user +
-                "userComment='" + userComment + '\'' +
+                ", userComment='" + userComment + '\'' +
                 ", date='" + date + '\'' +
                 '}';
     }

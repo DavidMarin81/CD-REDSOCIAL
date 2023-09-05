@@ -17,11 +17,11 @@ public class Main {
         createBBDD();
 
         //Se inicia el programa
-        int finalizar = 0;
+        int finalizar = -1;
         do {
             createMenu();
             finalizar = chooseMenuOptions();
-        }while (finalizar != 7);
+        }while (finalizar != 0);
 
     }
 
@@ -55,12 +55,25 @@ public class Main {
         postList.add(post4);
         postList.add(post5);
 
-        post1.getCommentsList().add("Este es el primer comentario");
-        post1.getCommentsList().add("Este es el segundo comentario");
-        post2.getCommentsList().add("Este es el primer comentario");
-        post3.getCommentsList().add("Este es el primer comentario");
-        post3.getCommentsList().add("Este es el segundo comentario");
-        post3.getCommentsList().add("Este es el tercer comentario");
+        Comment comment1 = new Comment(user1, "Este es el primer comentario de Juan");
+        Comment comment2 = new Comment(user2, "Este es el primer comentario de Pepe");
+
+        Comment comment3 = new Comment(user1, "Este es el segundo comentario de Juan");
+        Comment comment4 = new Comment(user2, "Este es el segundo comentario de Pepe");
+
+        Comment comment5 = new Comment(user2, "Este es el tercer comentario de Pepe");
+        Comment comment6 = new Comment(user4, "Este es el primer comentario de Laura");
+        Comment comment7 = new Comment(user5, "Este es el primer comentario de Manuel");
+
+        post1.addComment(comment1);
+        post1.addComment(comment2);
+
+        post2.addComment(comment3);
+        post2.addComment(comment4);
+
+        post3.addComment(comment5);
+        post3.addComment(comment6);
+        post4.addComment(comment7);
 
     }
 
@@ -73,8 +86,10 @@ public class Main {
         System.out.println("3.- Seguir a un usuario");
         System.out.println("4.- Eliminar...");
         System.out.println("5.- Listar los posts de un usuario");
-        System.out.println("6.- Mostrar el numero de comentarios de un post");
-        System.out.println("7.- Salir");
+        System.out.println("6.- Listar los comentarios de un usuario");
+        System.out.println("7.- Mostrar el numero de comentarios de un post");
+        System.out.println("8.- Mostrar los 10 post de usuarios a los que sigues");
+        System.out.println("0.- Salir");
         System.out.println(" ====================================");
     }
 
@@ -123,14 +138,20 @@ public class Main {
                     showUserPost();
                     break;
                 case 6:
-                    showTotalComments();
+                    showUserComment();
                     break;
                 case 7:
+                    showTotalComments();
+                    break;
+                case 8:
+
+                    break;
+                case 0:
                     //Se usa para salir del programa
                     break;
                 default:
                     System.out.println("Opcion incorrecta");
-                    System.out.println("Debe introducir un numero del 1 al 7");
+                    System.out.println("Debe introducir un numero del 1 al 8");
                     correct = false;
             }
         }while (!correct);
@@ -242,7 +263,7 @@ public class Main {
         System.out.println(" ====================================");
         System.out.println("       SEGUIR A UN USUARIO");
         System.out.println(" ====================================");
-        showUserList(mainUserList);
+        showUserList(usersList);
         System.out.println(" ====================================");
         String userToFollow = Input2.string("Introduce el nombre de usuario al que quieras seguir:");
         User user = searchUser(mainUserList, userToFollow);
@@ -260,6 +281,9 @@ public class Main {
     public static void unFollowUser(){
         System.out.println(" ====================================");
         System.out.println("     DEJAR DE SEGUIR A UN USUARIO");
+        System.out.println(" ====================================");
+        System.out.println("Sigues a:");
+        showUserList(usersList);
         System.out.println(" ====================================");
         String userToUnfollow = Input2.string("Introduce el nombre de usuario al que quieras dejar de seguir:");
         User user = searchUser(usersList, userToUnfollow);
@@ -297,10 +321,23 @@ public class Main {
         System.out.println(" ====================================");
         System.out.println("       VER POSTS DE UN USUARIO");
         System.out.println(" ====================================");
-        String newUser = Input2.string("Introduce un nombre de usuario:");
-        User user = searchUser(mainUserList, newUser);
+        String chosedUser = Input2.string("Introduce un nombre de usuario:");
+        User user = searchUser(mainUserList, chosedUser);
         if(user != null){
             showUserPostList(user);
+        } else {
+            System.out.println("No se ha encontrado ningún usuario");
+        }
+    }
+
+    public static void showUserComment(){
+        System.out.println(" ====================================");
+        System.out.println("    VER COMENTARIOS DE UN USUARIO");
+        System.out.println(" ====================================");
+        String chosedUser = Input2.string("Introduce un nombre de usuario:");
+        User user = searchUser(mainUserList, chosedUser);
+        if(user != null){
+            showComments(user);
         } else {
             System.out.println("No se ha encontrado ningún usuario");
         }
@@ -343,10 +380,9 @@ public class Main {
             int contador = 1;
             for(Post p : postList){
                 if((postNumber) == contador){
-                    p.addComment(message);
+                    Comment comment = new Comment(mainUser, message);
+                    p.addComment(comment);
                     System.out.println("El comentario se ha añadido correctamente");
-                    System.out.println("Comentarios del post: ");
-                    showComments(p);
                     break;
                 }
                 contador++;
@@ -356,15 +392,18 @@ public class Main {
         }
     }
 
-    public static void showComments(Post post){
+    public static void showComments(User user){
         int contador = 1;
         for (Post p : postList){
-            if(post == p){
-                for(String c : post.getCommentsList()){
-                    System.out.println(contador + " -> " + c);
+            for(Comment c : p.getCommentsList()){
+                if(c.getUser() == user){
+                    System.out.println(contador + " -> " + c.getUserComment());
+                    System.out.println(p);
                     contador++;
                 }
-                break;
+            }
+            if(p.getCommentsList().size() == 0){
+                System.out.println("El usuario no tiene comentarios");
             }
         }
     }
@@ -376,7 +415,11 @@ public class Main {
         if(postNumber <= postList.size() &&postNumber > 0) {
             for(Post p : postList){
                 if((postNumber) == contador){
-                    showComments(p);
+                    for(Comment c : p.getCommentsList()){
+                        if(c.getUser() == p.getUser()){
+                            showComments(p.getUser());
+                        }
+                    }
                     System.out.println("Total comentarios -> " + p.getCommentsList().size());
                     break;
                 }
@@ -395,12 +438,16 @@ public class Main {
             int contador = 1;
             for(Post p : postList){
                 if(postNumber == contador){
-                    showComments(p);
+                    //Mostrar todos los comentarios
+                    int cont = 1;
+                    for(Comment c : p.getCommentsList()){
+                        System.out.println(cont + " -> " + c.getUserComment());
+                        cont++;
+                    }
                     int commentNumber = Input2.integer("Introduce el numero del comentario que quieres borrar: ");
                     if (commentNumber <= p.getCommentsList().size() && commentNumber > 0){
                             p.getCommentsList().remove(commentNumber - 1);
                             System.out.println("Se ha borrado el comentario correctamente");
-                            showComments(p);
                             break;
                         }
                 }
