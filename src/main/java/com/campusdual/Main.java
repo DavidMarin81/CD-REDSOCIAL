@@ -1,14 +1,13 @@
 package com.campusdual;
 
 import com.campusdual.Util.Input2;
-import com.sun.security.jgss.GSSUtil;
 
 import java.util.ArrayList;
 
 public class Main {
     public static User mainUser = new User("David");
     public static ArrayList<User> mainUserList = new ArrayList<>();
-    public static ArrayList<User> usersList = new ArrayList<>();
+    public static ArrayList<User> followedUsers = new ArrayList<>();
     public static ArrayList<Post> postList = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -89,6 +88,7 @@ public class Main {
         System.out.println("6.- Listar los comentarios de un usuario");
         System.out.println("7.- Mostrar el numero de comentarios de un post");
         System.out.println("8.- Mostrar los 10 post de usuarios a los que sigues");
+        System.out.println("9.- Usuarios que sigues");
         System.out.println("0.- Salir");
         System.out.println(" ====================================");
     }
@@ -144,7 +144,10 @@ public class Main {
                     showTotalComments();
                     break;
                 case 8:
-
+                    showFollowedUserPost();
+                    break;
+                case 9:
+                    showFollowedUsers();
                     break;
                 case 0:
                     //Se usa para salir del programa
@@ -239,7 +242,7 @@ public class Main {
         User user = searchUser(mainUserList, userToRemove);
         if (user != null) {
             mainUserList.remove(user);
-            usersList.remove(user);
+            followedUsers.remove(user);
             System.out.println("El usuario se ha eliminado correctamente");
         } else {
             System.out.println("No se ha encontrado ningun usuario con ese nombre");
@@ -263,19 +266,17 @@ public class Main {
         System.out.println(" ====================================");
         System.out.println("       SEGUIR A UN USUARIO");
         System.out.println(" ====================================");
-        showUserList(usersList);
+        System.out.println("Sigues a: ");
+        showUserList(followedUsers);
         System.out.println(" ====================================");
-        String userToFollow = Input2.string("Introduce el nombre de usuario al que quieras seguir:");
+        String userToFollow = Input2.string("Introduce el nombre de usuario al que quieras seguir: ");
         User user = searchUser(mainUserList, userToFollow);
         if (user != null) {
-            usersList.add(user);
+            followedUsers.add(user);
             System.out.println("Empiezas a seguir a este usuario");
         } else {
             System.out.println("No existe un usuario con ese nombre");
         }
-        System.out.println(" ====================================");
-        System.out.println("Sigues a: ");
-        showUserList(usersList);
     }
 
     public static void unFollowUser(){
@@ -283,19 +284,19 @@ public class Main {
         System.out.println("     DEJAR DE SEGUIR A UN USUARIO");
         System.out.println(" ====================================");
         System.out.println("Sigues a:");
-        showUserList(usersList);
+        showUserList(followedUsers);
         System.out.println(" ====================================");
         String userToUnfollow = Input2.string("Introduce el nombre de usuario al que quieras dejar de seguir:");
-        User user = searchUser(usersList, userToUnfollow);
+        User user = searchUser(followedUsers, userToUnfollow);
         if (user != null) {
-            usersList.remove(user);
+            followedUsers.remove(user);
             System.out.println("Has dejado de seguir a este usuario");
         } else {
             System.out.println("No existe un usuario con ese nombre");
         }
         System.out.println(" ====================================");
         System.out.println("Sigues a: ");
-        showUserList(usersList);
+        showUserList(followedUsers);
     }
 
     public static void showUserList(ArrayList<User> userList){
@@ -458,4 +459,20 @@ public class Main {
         }
     }
 
+    private static void showFollowedUserPost() {
+    }
+
+    private static void showFollowedUsers(){
+        System.out.println(" ====================================");
+        System.out.println("      USUARIO A LOS QUE SIGUES");
+        System.out.println(" ====================================");
+        if(followedUsers.size() != 0){
+            for(User u : followedUsers){
+                System.out.println(u.getUserName());
+            }
+        } else {
+            System.out.println("No sigues a ningun usuario");
+        }
+
+    }
 }
