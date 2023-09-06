@@ -11,7 +11,7 @@ public class Main {
     public static ArrayList<Post> postList = new ArrayList<>();
 
     public static void main(String[] args) {
-
+        //Para corregir
         //Se crea la BBDD
         createBBDD();
 
