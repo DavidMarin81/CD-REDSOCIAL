@@ -2,7 +2,6 @@ package com.campusdual;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 public class Comment {
     private String userComment;
@@ -12,11 +11,22 @@ public class Comment {
     public Comment(User user, String comment){
         this.user = user;
         this.userComment = comment;
-        date = putDate();
+        date = crearDate();
 
     }
 
-    public String putDate(){
+    public String crearDate(){
+        /*
+        int days = (int)(Math.random()*28+1);
+        int months = (int)(Math.random()*12+1);
+        int years = (int)(Math.random()*22+100); //Empieza en 1900
+        int hours = (int)(Math.random()*24);
+        int minutes = (int)(Math.random()*60);
+        int seconds = (int)(Math.random()*60);
+
+        Date date = new Date(years, months, days, hours, minutes, seconds);
+        System.out.println(date);
+        */
         date = DateTimeFormatter.ofPattern("dd-MM-yyyy, hh:mm:ss")
                 .format(LocalDateTime.now());
         return date;

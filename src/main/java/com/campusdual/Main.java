@@ -305,19 +305,6 @@ public class Main {
         }
     }
 
-    public static void showUserPostList(User user){
-        int contador = 0;
-        for(Post p : postList){
-            if(p.getUser().equals(user)){
-                System.out.println(p);
-                contador++;
-            }
-        }
-        if(contador == 0){
-            System.out.println(user.getUserName() + " no ha hecho ninguna publicación");
-        }
-    }
-
     public static void showUserPost(){
         System.out.println(" ====================================");
         System.out.println("       VER POSTS DE UN USUARIO");
@@ -331,6 +318,19 @@ public class Main {
         }
     }
 
+    public static void showUserPostList(User user){
+        int contador = 0;
+        for(Post p : postList){
+            if(p.getUser().equals(user)){
+                System.out.println(p);
+                contador++;
+            }
+        }
+        if(contador == 0){
+            System.out.println(user.getUserName() + " no ha hecho ninguna publicación");
+        }
+    }
+
     public static void showUserComment(){
         System.out.println(" ====================================");
         System.out.println("    VER COMENTARIOS DE UN USUARIO");
@@ -341,6 +341,22 @@ public class Main {
             showComments(user);
         } else {
             System.out.println("No se ha encontrado ningún usuario");
+        }
+    }
+
+    public static void showComments(User user){
+        int contador = 1;
+        for (Post p : postList){
+            for(Comment c : p.getCommentsList()){
+                if(c.getUser().equals(user)){
+                    System.out.println(contador + " -> " + c.getUserComment());
+                    System.out.println(p);
+                    contador++;
+                }
+            }
+            if(p.getCommentsList().size() == 0){
+                System.out.println("El usuario no tiene comentarios");
+            }
         }
     }
 
@@ -393,22 +409,6 @@ public class Main {
         }
     }
 
-    public static void showComments(User user){
-        int contador = 1;
-        for (Post p : postList){
-            for(Comment c : p.getCommentsList()){
-                if(c.getUser() == user){
-                    System.out.println(contador + " -> " + c.getUserComment());
-                    System.out.println(p);
-                    contador++;
-                }
-            }
-            if(p.getCommentsList().size() == 0){
-                System.out.println("El usuario no tiene comentarios");
-            }
-        }
-    }
-
     public static void showTotalComments(){
         int contador = 1;
         showPosts();
@@ -417,7 +417,7 @@ public class Main {
             for(Post p : postList){
                 if((postNumber) == contador){
                     for(Comment c : p.getCommentsList()){
-                        if(c.getUser() == p.getUser()){
+                        if(c.getUser().equals(p.getUser())){
                             showComments(p.getUser());
                         }
                     }
@@ -460,6 +460,7 @@ public class Main {
     }
 
     private static void showFollowedUserPost() {
+        //Sin implementar
     }
 
     private static void showFollowedUsers(){
